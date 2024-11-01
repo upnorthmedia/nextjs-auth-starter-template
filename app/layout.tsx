@@ -1,26 +1,36 @@
-import { ClerkProvider } from "@clerk/nextjs";
 import "./globals.css";
-import Script from "next/script";
+import { Inter } from "next/font/google";
+import { ClerkProvider } from "@clerk/nextjs";
+import { ThemeProvider } from "@/app/components/theme-provider";
 import { Metadata } from "next";
-import localFont from "next/font/local";
+import { dark } from "@clerk/themes";
+import { Header } from "@/app/components/layout/header";
+import { Footer } from "@/app/components/layout/footer";
+
+const inter = Inter({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
-  metadataBase: new URL("https://clerk-next-app.vercel.app/"),
-  title: "Next.js Clerk Template",
-  description:
-    "A simple and powerful Next.js template featuring authentication and user management powered by Clerk.",
-  openGraph: { images: ["/og.png"] },
+  title: "Up North Media - Employee Dashboard",
+  description: "Internal dashboard for Up North Media employees",
+  icons: {
+    icon: [
+      { url: '/favicon-96x96.png', sizes: '96x96', type: 'image/png' },
+      { url: '/favicon.svg', type: 'image/svg+xml' },
+      { url: '/favicon.ico' },
+    ],
+    apple: [
+      { url: '/apple-touch-icon.png', sizes: '180x180' },
+    ],
+  },
+  manifest: '/site.webmanifest',
+  appleWebApp: {
+    title: 'Dashboard',
+    capable: true,
+  },
+  other: {
+    'mobile-web-app-capable': 'yes',
+  },
 };
-
-const geistSans = localFont({
-  src: "./fonts/GeistVF.woff",
-  variable: "--font-geist-sans",
-});
-
-const geistMono = localFont({
-  src: "./fonts/GeistMonoVF.woff",
-  variable: "--font-geist-mono",
-});
 
 export default function RootLayout({
   children,
@@ -28,31 +38,35 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   return (
-    <html lang="en" className={`${geistSans.variable} ${geistMono.variable}`}>
-      <ClerkProvider
-        appearance={{
-          variables: { colorPrimary: "#000000" },
-          elements: {
-            formButtonPrimary:
-              "bg-black border border-black border-solid hover:bg-white hover:text-black",
-            socialButtonsBlockButton:
-              "bg-white border-gray-200 hover:bg-transparent hover:border-black text-gray-600 hover:text-black",
-            socialButtonsBlockButtonText: "font-semibold",
-            formButtonReset:
-              "bg-white border border-solid border-gray-200 hover:bg-transparent hover:border-black text-gray-500 hover:text-black",
-            membersPageInviteButton:
-              "bg-black border border-black border-solid hover:bg-white hover:text-black",
-            card: "bg-[#fafafa]",
-          },
-        }}
-      >
-        <body className={`min-h-screen flex flex-col antialiased`}>
-          {children}
+    <ClerkProvider
+      appearance={{
+        baseTheme: dark,
+        variables: {
+          colorBackground: 'hsl(224 71% 4%)',
+          colorText: 'hsl(213 31% 91%)',
+          colorPrimary: 'hsl(271 83% 52%)'
+        }
+      }}
+    >
+      <html lang="en" suppressHydrationWarning>
+        <body className={inter.className}>
+          <ThemeProvider
+            attribute="class"
+            defaultTheme="dark"
+            enableSystem={false}
+            forcedTheme="dark"
+            disableTransitionOnChange
+          >
+            <div className="min-h-screen bg-background flex flex-col">
+              <Header />
+              <main className="flex-1">
+                {children}
+              </main>
+              <Footer />
+            </div>
+          </ThemeProvider>
         </body>
-      </ClerkProvider>
-
-      <Script src="https://cdn.jsdelivr.net/npm/prismjs@1/components/prism-core.min.js" />
-      <Script src="https://cdn.jsdelivr.net/npm/prismjs@1/plugins/autoloader/prism-autoloader.min.js" />
-    </html>
+      </html>
+    </ClerkProvider>
   );
 }

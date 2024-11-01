@@ -12,13 +12,6 @@ export const CARDS = [
     href: "https://clerk.com/docs/references/react/use-user?utm_source=vercel-template&utm_medium=partner&utm_term=react_hooks",
     linkText: "React Hooks",
   },
-  {
-    title: "Organizations",
-    description:
-      "Built for B2B SaaS: create and switch between orgs, manage and invite members, and assign custom roles.",
-    href: "https://clerk.com/docs/organizations/overview?utm_source=vercel-template&utm_medium=partner&utm_term=component_reference",
-    linkText: "Organizations",
-  },
 ];
 
 export const DASHBOARD_CARDS = [
